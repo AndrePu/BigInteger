@@ -1,0 +1,12 @@
+X:\C#\My Projects\BigInteger\bin\Debug\Cryptography.dll
+X:\C#\My Projects\BigInteger\bin\Debug\Cryptography.pdb
+X:\C#\My Projects\BigInteger\obj\Debug\Cryptography.csprojResolveAssemblyReference.cache
+X:\C#\My Projects\BigInteger\obj\Debug\Cryptography.csproj.CoreCompileInputs.cache
+X:\C#\My Projects\BigInteger\obj\Debug\Cryptography.dll
+X:\C#\My Projects\BigInteger\obj\Debug\Cryptography.pdb
+X:\C#\My projects\BigInteger\BigInteger\bin\Debug\Cryptography.dll
+X:\C#\My projects\BigInteger\BigInteger\bin\Debug\Cryptography.pdb
+X:\C#\My projects\BigInteger\BigInteger\obj\Debug\Cryptography.csprojResolveAssemblyReference.cache
+X:\C#\My projects\BigInteger\BigInteger\obj\Debug\Cryptography.csproj.CoreCompileInputs.cache
+X:\C#\My projects\BigInteger\BigInteger\obj\Debug\Cryptography.dll
+X:\C#\My projects\BigInteger\BigInteger\obj\Debug\Cryptography.pdb
