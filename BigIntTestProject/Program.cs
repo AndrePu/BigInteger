@@ -11,12 +11,21 @@ namespace BigIntTestProject
     {
         static void Main(string[] args)
         {
+            int a = -155;
+            
             BigInt number1 = new BigInt(Console.ReadLine());
             BigInt number2 = new BigInt(Console.ReadLine());
 
-            BigInt number3 = number1 + number2;
+            //BigInt number3 = number1 * number2;
 
-            number3.ConsolePrint();
+            //Console.WriteLine($"{number1} * {number2} = {number3.ToString()}");
+
+            Console.WriteLine($"{number1} < {number2} - {number1 < number2}");
+            Console.WriteLine($"{number1} > {number2} - {number1 > number2}");
+            Console.WriteLine($"{number1} == {number2} - {number1 == number2}");
+            Console.WriteLine($"{number1} != {number2} - {number1 != number2}");
+            Console.WriteLine($"{number1} >= {number2} - {number1 >= number2}");
+            Console.WriteLine($"{number1} <= {number2} - {number1 <= number2}");
 
             Console.ReadKey();
         }
