@@ -17,7 +17,6 @@ namespace Cryptography
     public class BigInt
     {
         private bool negative = false;                              // tells whether BigInteger is negative
-        
         private List<int> number = new List<int>();                 // big number will be presented as list of integers presenting one digit of number (старшие разряды числа будут дальше идти по списку)
 
         #region Constructors for creating example of class
@@ -75,28 +74,7 @@ namespace Cryptography
         #endregion
 
         #region Methods for working with examples of current class
-
-        /// <summary>
-        /// Tells whether first and second BigIntegers have the same number of units.
-        /// </summary>
-        /// <param name="First"></param>
-        /// <param name="Second"></param>
-        /// <returns></returns>
-        public static bool UnitLengthEqual(BigInt First, BigInt Second)
-        {
-            if (First.number.Count == Second.number.Count)
-                return true;
-
-            return false;
-        }
-
-        public static void Swap(ref BigInt First, ref BigInt Second)
-        {
-            BigInt temp = First;
-            First = Second;
-            Second = temp;
-        }
-
+        
         public bool IsNegative()
         {
             return negative;
@@ -139,18 +117,83 @@ namespace Cryptography
 
         #region Static methods of class
 
+
+        public static BigInt Parse(string line)
+        {
+            if (line == String.Empty)
+                return null;
+            
+            BigInt number = new BigInt();
+
+            int i = 0;
+            if (line[0] == '-')
+            {
+                number.negative = true;
+                i++;
+            }
+
+            for (; i < line.Length; i++)
+            {
+                if (line[i] >= '0' && line[i] <= '9')
+                    number.number.Insert(0, (int)line[i] - 48);
+                else
+                    return null; // THROW EXCEPTION HERE!!!!!!!!!!!!!!!!!!!!!1
+            }
+
+            return number;
+        }
+
+        /// <summary>
+        ///  Makes full copy of object of BigInt type.
+        /// </summary>
+        /// <returns>Returns reference on a new object, that has the same values that copied object had.</returns>
+        public static BigInt Copy(BigInt number)
+        {
+            BigInt copied_number = new BigInt();
+
+            if (number.IsNegative())
+                copied_number.negative = true;
+
+            for (int i = 0; i < number.number.Count; i++)
+            {
+                copied_number.number.Add(number.number[i]);
+            }
+
+            return copied_number;
+        }
+
+        public static BigInt Pow(BigInt Number, int power)
+        {
+            BigInt Result = new BigInt(1);
+            for (int i = 0; i < power; i++)
+            {
+                Result *= Number;
+            }
+
+            return Result;
+        }
+
+        public static BigInt Sqrt(BigInt Number) // ДОПИСАТЬ ЗДЕСЬ. НО СНАЧАЛА СДЕЛАТЬ ОПЕРАЦИЮ ДЕЛЕНИЯ ДЛЯ ЧИСЕЛ
+        {
+            BigInt Result = new BigInt();
+
+            int x0 = 100; // default X, that shows amount of iterations needed to do a sqrt
+
+            return Result;
+        }
+
         /// <summary>
         /// Calculates factorial of given number. 
         /// </summary>
         /// <param name="number"></param>
         /// <returns>If number less than one functions returns 1.</returns>
-        public static BigInt Factorial(int number) // ЗДЕСЬ ДОДЕЛАТЬ!!!!!!!!!!!!!!!
+        public static BigInt Factorial(int number)
         {
             BigInt result = new BigInt(1);          // the result of factorialization will be located in BigInt type object
 
             for (int i = 2; i <= number; i++)
             {
-
+                result *= i;
             }
 
             return result;
@@ -161,6 +204,43 @@ namespace Cryptography
             BigInt abs_number = new BigInt();
             abs_number.number.AddRange(number.number);
             return abs_number;
+        }
+        
+        public static void QuickSort(ref BigInt[] numbers, int left, int right)
+        {
+            if (left < right)
+            {
+                int piv = Partition(ref numbers, left, right);
+
+                QuickSort(ref numbers, left, piv-1);
+                QuickSort(ref numbers, piv + 1, right);
+            }
+        }
+        
+        private static int Partition(ref BigInt[] numbers, int left, int right)
+        {
+            BigInt pivot = numbers[right];
+
+            int ind1 = left - 1;    // index whose left numbers values in numbers_array are less than pivot value
+
+            for (int i = left; i < right; i++)
+            {
+                if (pivot > numbers[i])
+                {
+                    ind1++;
+                    Swap(ref numbers[ind1], ref numbers[i]);
+                }
+            }
+
+            Swap(ref numbers[right], ref numbers[++ind1]);
+            return ind1;
+        }
+
+        public static void Swap(ref BigInt First,ref BigInt Second)
+        {
+            BigInt temp = First;
+            First = Second;
+            Second = temp;
         }
         #endregion
 
@@ -375,7 +455,6 @@ namespace Cryptography
 
         #endregion
 
-
         #region true/false operators overloading
         public static bool operator true(BigInt number)
         {
@@ -411,7 +490,28 @@ namespace Cryptography
             return Number;
         }
 
-        public static implicit operator string(BigInt Number)
+        public static implicit operator BigInt(long number)
+        {
+            BigInt Number = new BigInt(0);
+            if (number == 0)
+                return Number;
+
+            Number.number.Clear();
+
+            if (number < 0)
+                Number.negative = true;
+
+            while (number != 0)
+            {
+                Number.number.Add((int)(number % 10));
+
+                number /= 10;
+            }
+
+            return Number;
+        }
+
+        public static explicit operator string(BigInt Number)
         {
             string number = String.Empty;
 
