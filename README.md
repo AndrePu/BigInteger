@@ -21,6 +21,3 @@ For the following year I promise that this class will be having next features:
 - Sorting the array of BigIntegers
 - Parse function to parse strings to BigInt data
 - Ukraine Economic will increase on five percents!!
-
-
-## P.S Multiplying and adding of negative numbers isn't supported yet. In another words work with positive numbers only!
