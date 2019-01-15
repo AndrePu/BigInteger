@@ -20,4 +20,6 @@ For the following year I promise that this class will be having next features:
 - Arithmetic operations /
 - Sorting the array of BigIntegers
 - Parse function to parse strings to BigInt data
+- To add Pow static function for BigIntegers
+- To add Sqrt static function for BigIntegers
 - Ukraine Economic will increase on five percents!!
