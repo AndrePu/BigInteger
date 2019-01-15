@@ -20,7 +20,6 @@ For the following year I promise that this class will be having next features:
 - Arithmetic operations /
 - Sorting the array of BigIntegers
 - Parse function to parse strings to BigInt data
-- Not implicit casting integers to BigInt data type
 - Ukraine Economic will increase on five percents!!
 
 
