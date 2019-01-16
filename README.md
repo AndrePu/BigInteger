@@ -22,5 +22,6 @@ Now, this class has following features:
 
 For the following year I promise that this class will be having next features:
 - Arithmetic operations /
-- To add Sqrt static function for BigIntegers
+- To add Sqrt(BigInt) static function for BigIntegers
+- To add NthRoot(BigInt, int) static function where second parameter is degree of root we want to calculate
 - Ukraine Economic will increase on five percents!!
