@@ -14,12 +14,13 @@ Now, this class has following features:
 - Explicit casting strings to BigInt Data Type and on the contrary
 - Abs math function for BigInteger!!!
 - true/false operators overloading - Now it's shown true in if-statement when BigInt doesn't equal to zero!
+- Parse function to parse strings to BigInt data
+- Sorting the array of BigIntegers (QuickSort)
+- To add Pow static function for BigIntegers
+- Finding factorial of quite big number
+
 
 For the following year I promise that this class will be having next features:
-- Finding factorial of quite big number
 - Arithmetic operations /
-- Sorting the array of BigIntegers
-- Parse function to parse strings to BigInt data
-- To add Pow static function for BigIntegers
 - To add Sqrt static function for BigIntegers
 - Ukraine Economic will increase on five percents!!
