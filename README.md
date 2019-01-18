@@ -24,4 +24,5 @@ For the following year I promise that this class will be having next features:
 - Arithmetic operations /
 - To add Sqrt(BigInt) static function for BigIntegers
 - To add NthRoot(BigInt, int) static function where second parameter is degree of root we want to calculate
+- To add Mean math operation
 - Ukraine Economic will increase on five percents!!
