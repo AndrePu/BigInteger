@@ -91,7 +91,7 @@ namespace Cryptography
 
             Console.WriteLine();
         }
-
+        
         /// <summary>
         /// Converting BigInteger to String format.
         /// </summary>
@@ -116,7 +116,6 @@ namespace Cryptography
 
 
         #region Static methods of class
-
 
         public static BigInt Parse(string line)
         {
@@ -162,50 +161,15 @@ namespace Cryptography
             return copied_number;
         }
 
-        public static BigInt Pow(BigInt Number, int power)
+        public static void Swap(ref BigInt First, ref BigInt Second)
         {
-            BigInt Result = new BigInt(1);
-            for (int i = 0; i < power; i++)
-            {
-                Result *= Number;
-            }
-
-            return Result;
+            BigInt temp = First;
+            First = Second;
+            Second = temp;
         }
 
-        public static BigInt Sqrt(BigInt Number) // ДОПИСАТЬ ЗДЕСЬ. НО СНАЧАЛА СДЕЛАТЬ ОПЕРАЦИЮ ДЕЛЕНИЯ ДЛЯ ЧИСЕЛ
-        {
-            BigInt Result = new BigInt();
 
-            int x0 = 100; // default X, that shows amount of iterations needed to do a sqrt
-
-            return Result;
-        }
-
-        /// <summary>
-        /// Calculates factorial of given number. 
-        /// </summary>
-        /// <param name="number"></param>
-        /// <returns>If number less than one functions returns 1.</returns>
-        public static BigInt Factorial(int number)
-        {
-            BigInt result = new BigInt(1);          // the result of factorialization will be located in BigInt type object
-
-            for (int i = 2; i <= number; i++)
-            {
-                result *= i;
-            }
-
-            return result;
-        }
-
-        public static BigInt Abs(BigInt number)
-        {
-            BigInt abs_number = new BigInt();
-            abs_number.number.AddRange(number.number);
-            return abs_number;
-        }
-        
+        #region Sorting functions
         public static void QuickSort(ref BigInt[] numbers, int left, int right)
         {
             if (left < right)
@@ -235,13 +199,87 @@ namespace Cryptography
             Swap(ref numbers[right], ref numbers[++ind1]);
             return ind1;
         }
+        #endregion
 
-        public static void Swap(ref BigInt First,ref BigInt Second)
+
+        #region Math operations with BigIntegers
+
+        /// <summary>
+        /// Calculates factorial of given number. 
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>If number less than one functions returns 1.</returns>
+        public static BigInt Factorial(int number)
         {
-            BigInt temp = First;
-            First = Second;
-            Second = temp;
+            BigInt result = new BigInt(1);          // the result of factorialization will be located in BigInt type object
+
+            for (int i = 2; i <= number; i++)
+            {
+                result *= i;
+            }
+
+            return result;
         }
+
+        public static BigInt Abs(BigInt number)
+        {
+            BigInt abs_number = new BigInt();
+            abs_number.number.AddRange(number.number);
+            return abs_number;
+        }
+        
+        public static BigInt Pow(BigInt Number, int power)
+        {
+            BigInt Result = new BigInt(1);
+            for (int i = 0; i < power; i++)
+            {
+                Result *= Number;
+            }
+
+            return Result;
+        }
+
+        public static BigInt Sqrt(BigInt Number) // ДОПИСАТЬ ЗДЕСЬ. НО СНАЧАЛА СДЕЛАТЬ ОПЕРАЦИЮ ДЕЛЕНИЯ ДЛЯ ЧИСЕЛ
+        {
+            BigInt Result = new BigInt();
+
+            int x0 = 100; // default X, that shows amount of iterations needed to do a sqrt
+
+            return Result;
+        }
+
+        public static BigInt Sum(params BigInt[] bigInt_arr)
+        {
+            BigInt result = new BigInt(0);
+            for (int i = 0; i < bigInt_arr.Length; i++)
+            {
+                result += bigInt_arr[i];
+            }
+
+            return result;
+        }
+
+        public static BigInt Multiply(params BigInt[] bigInt_arr)
+        {
+            BigInt result = new BigInt(1);
+            for (int i = 0; i < bigInt_arr.Length; i++)
+            {
+                result *= bigInt_arr[i];
+            }
+
+            return result;
+        }
+
+        public static BigInt Mean(params BigInt[] bigInt_arr)
+        {
+            BigInt result = Sum(bigInt_arr);
+
+            // РЕАЛИЗОВАТЬ ОПЕРАЦИЮ ДЕЛЕНИЯ,ЧТОБЫ ИСПОЛЗОВАТЬ ДАННУЮ ФУНКЦИЮ
+
+            return result;
+        }
+        #endregion
+
         #endregion
 
         #region Operators overloading
@@ -668,6 +706,15 @@ namespace Cryptography
 
 
             }
+
+            for (int i = Result.Count - 1; Result[i] == 0 && i != 0; i--)  // remove zero prefix in our result number
+            {
+                Result.RemoveAt(i);
+            }
+
+            if (Result.Count == 0)                  // include case when we have zero when we minused
+                Result.Add(0);
+
             return Result;
         }
 
