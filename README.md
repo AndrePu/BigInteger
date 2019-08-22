@@ -1,5 +1,5 @@
 # BigInteger
-In this project implemented analog of BigInteger C# struct in order to consolidate knowledges from topics:
+In this project implemented analog of System.Numerics.BigInteger C# struct in order to consolidate knowledges from topics:
 - operators overload;
 - Conversion operators overload;
 
