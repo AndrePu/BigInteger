@@ -1,0 +1,4 @@
+#ignore next files in folders
+[Bb]in/
+[Oo]bj/
+.vs
