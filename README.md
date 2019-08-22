@@ -19,6 +19,7 @@ Implemented BigInteger class has following abilities:
 
 For the following year I promise that this class will be having next features:
 - Dividing `/`
+- Overriding Equals and GetHashCode function;
 - Sqrt(BigInt) static function;
 - NthRoot(BigInt, int) static function;
 - Mean(..) static function
