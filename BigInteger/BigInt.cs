@@ -14,12 +14,12 @@ namespace Cryptography
         Bigger
     }
 
-    public class BigInt
+    public sealed class BigInt
     {
-        private bool negative = false;                              // tells whether BigInteger is negative
-        private List<int> number = new List<int>();                 // big number will be presented as list of integers presenting one digit of number (старшие разряды числа будут дальше идти по списку)
+        private bool negative = false;
+        private List<int> numericalRank = new List<int>();                 // big number will be presented as list of integers presenting one digit of number (старшие разряды числа будут дальше идти по списку)
 
-        #region Constructors for creating example of class
+        #region Constructors
         public BigInt() { }
 
         public BigInt(string number)
@@ -31,14 +31,14 @@ namespace Cryptography
 
             for (int i = number.Length - 1; i != -1 + ((negative) ? 1 : 0) ; i--)
             {
-                this.number.Add(int.Parse(number[i].ToString()));
+                this.numericalRank.Add(int.Parse(number[i].ToString()));
             }
         }
 
         public BigInt(int number)
         {
             if (number == 0)
-                this.number.Add(number);
+                this.numericalRank.Add(number);
 
 
             if (number < 0)
@@ -49,14 +49,15 @@ namespace Cryptography
 
             while (number != 0)
             {
-                this.number.Add(number % 10);
+                this.numericalRank.Add(number % 10);
                 number /= 10;
             }
         }
+
         public BigInt(long number)
         {
             if (number == 0)
-                this.number.Add((int)number);
+                this.numericalRank.Add((int)number);
 
             if (number < 0)
             {
@@ -66,15 +67,14 @@ namespace Cryptography
             
             while (number != 0)
             {
-                this.number.Add((int)(number % 10));
+                this.numericalRank.Add((int)(number % 10));
                 number /= 10;
             }
         }
 
         #endregion
 
-        #region Methods for working with examples of current class
-        
+        #region Instance methods
         public bool IsNegative()
         {
             return negative;
@@ -84,19 +84,15 @@ namespace Cryptography
         {
             if (negative)
                 Console.Write('-');
-            for (int i = number.Count - 1; i != -1; i--)
+            for (int i = numericalRank.Count - 1; i != -1; i--)
             {
-                Console.Write(number[i]);
+                Console.Write(numericalRank[i]);
             }
 
             Console.WriteLine();
         }
         
-        /// <summary>
-        /// Converting BigInteger to String format.
-        /// </summary>
-        /// <returns>Returns a BigInteger in string format.</returns>
-        public override string ToString()       // overriding main method object.ToString()
+        public override string ToString()
         {
             string number = String.Empty;
 
@@ -105,17 +101,22 @@ namespace Cryptography
                 number += '-';
             }
 
-            for (int i = this.number.Count - 1; i != -1; i--)
+            for (int i = this.numericalRank.Count - 1; i != -1; i--)
             {
-                number += this.number[i];
+                number += this.numericalRank[i];
             }
 
             return number;
         }
         #endregion
 
-
-        #region Static methods of class
+        #region Static methods
+        static void Swap(ref List<int> first, ref List<int> second)
+        {
+            List<int> temp = first;
+            first = second;
+            second = temp;
+        }
 
         public static BigInt Parse(string line)
         {
@@ -134,7 +135,7 @@ namespace Cryptography
             for (; i < line.Length; i++)
             {
                 if (line[i] >= '0' && line[i] <= '9')
-                    number.number.Insert(0, (int)line[i] - 48);
+                    number.numericalRank.Insert(0, (int)line[i] - 48);
                 else
                     return null; // THROW EXCEPTION HERE!!!!!!!!!!!!!!!!!!!!!1
             }
@@ -153,9 +154,9 @@ namespace Cryptography
             if (number.IsNegative())
                 copied_number.negative = true;
 
-            for (int i = 0; i < number.number.Count; i++)
+            for (int i = 0; i < number.numericalRank.Count; i++)
             {
-                copied_number.number.Add(number.number[i]);
+                copied_number.numericalRank.Add(number.numericalRank[i]);
             }
 
             return copied_number;
@@ -168,8 +169,7 @@ namespace Cryptography
             Second = temp;
         }
 
-
-        #region Sorting functions
+        
         public static void QuickSort(ref BigInt[] numbers, int left, int right)
         {
             if (left < right)
@@ -199,408 +199,6 @@ namespace Cryptography
             Swap(ref numbers[right], ref numbers[++ind1]);
             return ind1;
         }
-        #endregion
-
-
-        #region Math operations with BigIntegers
-
-        /// <summary>
-        /// Calculates factorial of given number. 
-        /// </summary>
-        /// <param name="number"></param>
-        /// <returns>If number less than one functions returns 1.</returns>
-        public static BigInt Factorial(int number)
-        {
-            BigInt result = new BigInt(1);          // the result of factorialization will be located in BigInt type object
-
-            for (int i = 2; i <= number; i++)
-            {
-                result *= i;
-            }
-
-            return result;
-        }
-
-        public static BigInt Abs(BigInt number)
-        {
-            BigInt abs_number = new BigInt();
-            abs_number.number.AddRange(number.number);
-            return abs_number;
-        }
-        
-        public static BigInt Pow(BigInt Number, int power)
-        {
-            BigInt Result = new BigInt(1);
-            for (int i = 0; i < power; i++)
-            {
-                Result *= Number;
-            }
-
-            return Result;
-        }
-
-        public static BigInt Sqrt(BigInt Number) // ДОПИСАТЬ ЗДЕСЬ. НО СНАЧАЛА СДЕЛАТЬ ОПЕРАЦИЮ ДЕЛЕНИЯ ДЛЯ ЧИСЕЛ
-        {
-            BigInt Result = new BigInt();
-
-            int x0 = 100; // default X, that shows amount of iterations needed to do a sqrt
-
-            return Result;
-        }
-
-        public static BigInt Sum(params BigInt[] bigInt_arr)
-        {
-            BigInt result = new BigInt(0);
-            for (int i = 0; i < bigInt_arr.Length; i++)
-            {
-                result += bigInt_arr[i];
-            }
-
-            return result;
-        }
-
-        public static BigInt Multiply(params BigInt[] bigInt_arr)
-        {
-            BigInt result = new BigInt(1);
-            for (int i = 0; i < bigInt_arr.Length; i++)
-            {
-                result *= bigInt_arr[i];
-            }
-
-            return result;
-        }
-
-        public static BigInt Mean(params BigInt[] bigInt_arr)
-        {
-            BigInt result = Sum(bigInt_arr);
-
-            // РЕАЛИЗОВАТЬ ОПЕРАЦИЮ ДЕЛЕНИЯ,ЧТОБЫ ИСПОЛЗОВАТЬ ДАННУЮ ФУНКЦИЮ
-
-            return result;
-        }
-        #endregion
-
-        #endregion
-
-        #region Operators overloading
-
-        #region Binary operators overloading
-
-        #region Arithmetic operators overloading
-        public static BigInt operator +(BigInt First, BigInt Second)
-        {
-            BigInt Result = new BigInt(0);
-
-            if (First.IsNegative() && !Second.IsNegative())
-            {
-                if ((Abs(First)) > (Abs(Second)))
-                {
-                    Result.number = Minus(First.number,Second.number);
-                    Result.negative = true;
-                }
-                else if (Abs(First) < Abs(Second))
-                {
-                    Result.number = Minus(Second.number, First.number);
-                }
-            }
-            else if (!First.IsNegative() && Second.IsNegative())
-            {
-                if (Abs(First) > Abs(Second))
-                {
-                    Result.number = Minus(First.number, Second.number);
-
-                }
-                else if (Abs(First) < Abs(Second))
-                {
-                    Result.number = Minus(Second.number, First.number);
-                    Result.negative = true;
-                }
-            }
-            else if (First.IsNegative() && Second.IsNegative())
-            {
-                Result.number = Add(First.number, Second.number);
-                Result.negative = true;
-            }
-            else
-            {
-                Result.number = Add(First.number, Second.number);
-            }
-
-            return Result;
-        }
-
-        public static BigInt operator *(BigInt First, BigInt Second)
-        {
-            BigInt Result = new BigInt(0);
-
-            Result.number = Multiply(First.number, Second.number);
-
-            if (First.IsNegative() && Second.IsNegative())
-            {
-                Result.negative = false;
-            }
-            else if (First.IsNegative() || Second.IsNegative())
-            {
-                Result.negative = true;
-            }
-            else
-                Result.negative = false;
-                
-            return Result;
-        }
-
-        public static BigInt operator -(BigInt First, BigInt Second)
-        {
-            BigInt Result = new BigInt(0);
-
-            /*Minus logic here*/
-            if (First.IsNegative() && !Second.IsNegative())
-            {
-                Result.number = Add(First.number, Second.number);
-                Result.negative = true;
-            }
-            else if (!First.IsNegative() && Second.IsNegative())
-            {
-                Result.number = Add(First.number, Second.number);
-            }
-            else if (First.IsNegative() && Second.IsNegative())
-            {
-                if (Abs(First) > Abs(Second))
-                {
-                    Result.number = Minus(First.number, Second.number);
-                    Result.negative = true;
-                }
-                else if (Abs(First) < Abs(Second))
-                {
-                    Result.number = Minus(Second.number, First.number);
-                }
-            }
-            else
-            {
-                if (First > Second)
-                {
-                    Result.number = Minus(First.number, Second.number);
-                }
-                else if (First < Second)
-                {
-                    Result.number = Minus(Second.number, First.number);
-
-                    Result.negative = true;
-                }
-            }
-
-            return Result;
-        }
-
-        public static BigInt operator /(BigInt First, BigInt Second)
-        {
-            BigInt Result = new BigInt(0);
-
-            if (First.IsNegative() && Second.IsNegative())
-            {
-                Result.negative = false;
-            }
-            else if (First.negative || Second.IsNegative())
-            {
-                Result.negative = true;
-            }
-            if (First > Second)
-                Result.number = Divide(First.number, Second.number);
-            else if (First == Second)
-            {
-                Result.number.Clear();
-                Result.number.Add(1);
-            }
-
-            return Result;
-        }
-
-        #endregion
-
-        #region Boolean operators overloading
-        public static bool operator <(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Less)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator >(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Bigger)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator <=(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Less || compare_result == CompareBigInt.Equal)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator >=(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Bigger || compare_result == CompareBigInt.Equal)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator ==(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Equal)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator !=(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Equal)
-            {
-                return false;
-            }
-
-            return true;
-        }
-        #endregion
-
-        #endregion
-
-        #region true/false operators overloading
-        public static bool operator true(BigInt number)
-        {
-            return number.number.Count != 1 || number.number[0] != 0;
-        }
-
-        public static bool operator false(BigInt number)
-        {
-            return number.number.Count == 1 && number.number[0] == 0;
-        }
-        #endregion
-
-        #region types casting overloading
-
-        public static implicit operator BigInt(int number)
-        {
-            BigInt Number = new BigInt(0);
-            if (number == 0)
-                return Number;
-
-            Number.number.Clear();
-
-            if (number < 0)
-                Number.negative = true;
-            
-            while (number != 0)
-            {
-                Number.number.Add(number % 10);
-
-                number /= 10;
-            }
-
-            return Number;
-        }
-
-        public static implicit operator BigInt(long number)
-        {
-            BigInt Number = new BigInt(0);
-            if (number == 0)
-                return Number;
-
-            Number.number.Clear();
-
-            if (number < 0)
-                Number.negative = true;
-
-            while (number != 0)
-            {
-                Number.number.Add((int)(number % 10));
-
-                number /= 10;
-            }
-
-            return Number;
-        }
-
-        public static explicit operator string(BigInt Number)
-        {
-            string number = String.Empty;
-
-            if (Number.IsNegative())
-                number += '-';
-
-            for (int i = Number.number.Count - 1; i != -1; i--)
-            {
-                number += Number.number[i].ToString();
-            }
-
-            return number;
-        }
-
-        public static explicit operator BigInt(string number)
-        {
-            if (number == String.Empty)
-                return null;
-
-            BigInt Number = new BigInt();
-            
-            int i = 0;
-            if (number[i] == '-')
-            {
-                Number.negative = true;
-                i++;
-            }
-
-            for (; i < number.Length; i++)
-            {
-                if (number[i] >= '0' && number[i] <= '9')
-                {
-                    Number.number.Insert(0,(int)number[i]-48);
-                }
-                else
-                    return null;
-            }
-
-            return Number;
-        }
-        #endregion
-
-        #region Unary operators overloaded
-
-        #endregion
-
-        #endregion
-
-        #region Extra functions that implements overloading
-
-        #region Arithmetic operations with numbers
 
         /// <summary>
         /// Adds two lists that present two BigIntegers
@@ -611,7 +209,7 @@ namespace Cryptography
         private static List<int> Add(List<int> first, List<int> second)
         {
             List<int> result = new List<int>();
-            
+
             if (first.Count < second.Count)
             {
                 Swap(ref first, ref second);
@@ -727,7 +325,7 @@ namespace Cryptography
             Second.AddRange(Second_Init);
 
             List<int> Result = new List<int>();
-            
+
             for (int i = 0; i < Second.Count; i++)
             {
                 int unit_result = First[i] - Second[i];
@@ -751,7 +349,7 @@ namespace Cryptography
                 Result.Add(First[i]);
             }
 
-            for (int i = Result.Count-1; Result[i] == 0 && i != 0; i--)  // remove zero prefix in our result number
+            for (int i = Result.Count - 1; Result[i] == 0 && i != 0; i--)  // remove zero prefix in our result number
             {
                 Result.RemoveAt(i);
             }
@@ -761,16 +359,6 @@ namespace Cryptography
 
             return Result;
         }
-
-        private static List<int> Divide(List<int> First_Init, List<int> Second_Init)
-        {
-            List<int> Result = new List<int>();
-            /*IMPLEMENT THIS FUNCTION*/
-            return Result;
-        }
-        #endregion
-
-        #region Boolean operations with numbers
 
         private static CompareBigInt CompareBigIntegers(BigInt First, BigInt Second)
         {
@@ -803,14 +391,14 @@ namespace Cryptography
         private static CompareBigInt CompareBigIntegersNeg(BigInt First, BigInt Second)
         {
             CompareBigInt compare_result;
-            
-            if (First.number.Count < Second.number.Count)
+
+            if (First.numericalRank.Count < Second.numericalRank.Count)
             {
                 compare_result = CompareBigInt.Bigger;
 
                 return compare_result;
             }
-            else if (First.number.Count > Second.number.Count)
+            else if (First.numericalRank.Count > Second.numericalRank.Count)
             {
                 compare_result = CompareBigInt.Less;
 
@@ -818,15 +406,15 @@ namespace Cryptography
             }
             else
             {
-                for (int i = First.number.Count-1; i != -1; i--)
+                for (int i = First.numericalRank.Count - 1; i != -1; i--)
                 {
-                    if (First.number[i] < Second.number[i])
+                    if (First.numericalRank[i] < Second.numericalRank[i])
                     {
                         compare_result = CompareBigInt.Bigger;
 
                         return compare_result;
                     }
-                    else if (First.number[i] > Second.number[i])
+                    else if (First.numericalRank[i] > Second.numericalRank[i])
                     {
                         compare_result = CompareBigInt.Less;
 
@@ -850,13 +438,13 @@ namespace Cryptography
         {
             CompareBigInt compare_result;
 
-            if (First.number.Count < Second.number.Count)
+            if (First.numericalRank.Count < Second.numericalRank.Count)
             {
                 compare_result = CompareBigInt.Less;
 
                 return compare_result;
             }
-            else if (First.number.Count > Second.number.Count)
+            else if (First.numericalRank.Count > Second.numericalRank.Count)
             {
                 compare_result = CompareBigInt.Bigger;
 
@@ -864,15 +452,15 @@ namespace Cryptography
             }
             else
             {
-                for (int i = First.number.Count - 1; i != -1; i--)
+                for (int i = First.numericalRank.Count - 1; i != -1; i--)
                 {
-                    if (First.number[i] > Second.number[i])
+                    if (First.numericalRank[i] > Second.numericalRank[i])
                     {
                         compare_result = CompareBigInt.Bigger;
 
                         return compare_result;
                     }
-                    else if (First.number[i] < Second.number[i])
+                    else if (First.numericalRank[i] < Second.numericalRank[i])
                     {
                         compare_result = CompareBigInt.Less;
 
@@ -885,19 +473,353 @@ namespace Cryptography
 
             return compare_result;
         }
+        
 
+        /// <summary>
+        /// Calculates factorial of given number. 
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>If number less than one functions returns 1.</returns>
+        public static BigInt Factorial(int number)
+        {
+            BigInt result = new BigInt(1);          // the result of factorialization will be located in BigInt type object
+
+            for (int i = 2; i <= number; i++)
+            {
+                result *= i;
+            }
+
+            return result;
+        }
+
+        public static BigInt Abs(BigInt number)
+        {
+            BigInt abs_number = new BigInt();
+            abs_number.numericalRank.AddRange(number.numericalRank);
+            return abs_number;
+        }
+        
+        public static BigInt Pow(BigInt Number, int power)
+        {
+            BigInt Result = new BigInt(1);
+            for (int i = 0; i < power; i++)
+            {
+                Result *= Number;
+            }
+
+            return Result;
+        }
+
+        public static BigInt Sqrt(BigInt Number) // ДОПИСАТЬ ЗДЕСЬ. НО СНАЧАЛА СДЕЛАТЬ ОПЕРАЦИЮ ДЕЛЕНИЯ ДЛЯ ЧИСЕЛ
+        {
+            BigInt Result = new BigInt();
+
+            int x0 = 100; // default X, that shows amount of iterations needed to do a sqrt
+
+            return Result;
+        }
+
+        public static BigInt Sum(params BigInt[] bigInt_arr)
+        {
+            BigInt result = new BigInt(0);
+            for (int i = 0; i < bigInt_arr.Length; i++)
+            {
+                result += bigInt_arr[i];
+            }
+
+            return result;
+        }
+
+        public static BigInt Multiply(params BigInt[] bigInt_arr)
+        {
+            BigInt result = new BigInt(1);
+            for (int i = 0; i < bigInt_arr.Length; i++)
+            {
+                result *= bigInt_arr[i];
+            }
+
+            return result;
+        }
         #endregion
 
-        #region Extra operations for methods that implement arithmetic and boolean operations
-        static void Swap(ref List<int> first, ref List<int> second)
+        #region Unary operators overloading
+        public static bool operator true(BigInt number)
         {
-            List<int> temp = first;
-            first = second;
-            second = temp;
+            return number.numericalRank.Count != 1 || number.numericalRank[0] != 0;
+        }
+
+        public static bool operator false(BigInt number)
+        {
+            return number.numericalRank.Count == 1 && number.numericalRank[0] == 0;
         }
 
         #endregion
 
+        #region Binary operators overloading
+        public static BigInt operator +(BigInt First, BigInt Second)
+        {
+            BigInt Result = new BigInt(0);
+
+            if (First.IsNegative() && !Second.IsNegative())
+            {
+                if ((Abs(First)) > (Abs(Second)))
+                {
+                    Result.numericalRank = Minus(First.numericalRank,Second.numericalRank);
+                    Result.negative = true;
+                }
+                else if (Abs(First) < Abs(Second))
+                {
+                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
+                }
+            }
+            else if (!First.IsNegative() && Second.IsNegative())
+            {
+                if (Abs(First) > Abs(Second))
+                {
+                    Result.numericalRank = Minus(First.numericalRank, Second.numericalRank);
+
+                }
+                else if (Abs(First) < Abs(Second))
+                {
+                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
+                    Result.negative = true;
+                }
+            }
+            else if (First.IsNegative() && Second.IsNegative())
+            {
+                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
+                Result.negative = true;
+            }
+            else
+            {
+                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
+            }
+
+            return Result;
+        }
+
+        public static BigInt operator *(BigInt First, BigInt Second)
+        {
+            BigInt Result = new BigInt(0);
+
+            Result.numericalRank = Multiply(First.numericalRank, Second.numericalRank);
+
+            if (First.IsNegative() && Second.IsNegative())
+            {
+                Result.negative = false;
+            }
+            else if (First.IsNegative() || Second.IsNegative())
+            {
+                Result.negative = true;
+            }
+            else
+                Result.negative = false;
+                
+            return Result;
+        }
+
+        public static BigInt operator -(BigInt First, BigInt Second)
+        {
+            BigInt Result = new BigInt(0);
+
+            /*Minus logic here*/
+            if (First.IsNegative() && !Second.IsNegative())
+            {
+                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
+                Result.negative = true;
+            }
+            else if (!First.IsNegative() && Second.IsNegative())
+            {
+                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
+            }
+            else if (First.IsNegative() && Second.IsNegative())
+            {
+                if (Abs(First) > Abs(Second))
+                {
+                    Result.numericalRank = Minus(First.numericalRank, Second.numericalRank);
+                    Result.negative = true;
+                }
+                else if (Abs(First) < Abs(Second))
+                {
+                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
+                }
+            }
+            else
+            {
+                if (First > Second)
+                {
+                    Result.numericalRank = Minus(First.numericalRank, Second.numericalRank);
+                }
+                else if (First < Second)
+                {
+                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
+
+                    Result.negative = true;
+                }
+            }
+
+            return Result;
+        }
+        
+        
+        public static bool operator <(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Less)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator >(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Bigger)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator <=(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Less || compare_result == CompareBigInt.Equal)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator >=(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Bigger || compare_result == CompareBigInt.Equal)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator ==(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Equal)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator !=(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Equal)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+
+
+        #region Convertation operators overloading
+        public static implicit operator BigInt(int number)
+        {
+            BigInt Number = new BigInt(0);
+            if (number == 0)
+                return Number;
+
+            Number.numericalRank.Clear();
+
+            if (number < 0)
+                Number.negative = true;
+            
+            while (number != 0)
+            {
+                Number.numericalRank.Add(number % 10);
+
+                number /= 10;
+            }
+
+            return Number;
+        }
+
+        public static implicit operator BigInt(long number)
+        {
+            BigInt Number = new BigInt(0);
+            if (number == 0)
+                return Number;
+
+            Number.numericalRank.Clear();
+
+            if (number < 0)
+                Number.negative = true;
+
+            while (number != 0)
+            {
+                Number.numericalRank.Add((int)(number % 10));
+
+                number /= 10;
+            }
+
+            return Number;
+        }
+
+        public static explicit operator string(BigInt Number)
+        {
+            string number = String.Empty;
+
+            if (Number.IsNegative())
+                number += '-';
+
+            for (int i = Number.numericalRank.Count - 1; i != -1; i--)
+            {
+                number += Number.numericalRank[i].ToString();
+            }
+
+            return number;
+        }
+
+        public static explicit operator BigInt(string number)
+        {
+            if (number == String.Empty)
+                return null;
+
+            BigInt Number = new BigInt();
+            
+            int i = 0;
+            if (number[i] == '-')
+            {
+                Number.negative = true;
+                i++;
+            }
+
+            for (; i < number.Length; i++)
+            {
+                if (number[i] >= '0' && number[i] <= '9')
+                {
+                    Number.numericalRank.Insert(0,(int)number[i]-48);
+                }
+                else
+                    return null;
+            }
+
+            return Number;
+        }
         #endregion
     }
 
