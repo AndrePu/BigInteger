@@ -1,12 +1,9 @@
 # BigInteger
-In this project implemented analog of BigInteger C# struct in order to consolidate knoledges from topics:
-- Operators overloading;
+In this project implemented analog of BigInteger C# struct in order to consolidate knowledges from topics:
+- operators overload;
+- Conversion operators overload;
 
-In cryptography namespace you can find implementation of the BigInt class and in program.cs you can test all the methods and possibilities in this class.
-
-Also it's popular to work with big numbers during programming competitions. It can take long time to implement definite function and operations for this numbers. So, you can use this BigInt class to complete your programming task without wasting your time.
-
-Now, this class has following features:
+Implemented BigInteger class has following abilities:
 - Class Constructor that supports string, int, long type object as input parameter or no parameters at all
 - Boolean operations: <,>,>=,<=,==,!=
 - Arithmetic Operations: +, *,-
@@ -21,8 +18,8 @@ Now, this class has following features:
 
 
 For the following year I promise that this class will be having next features:
-- Arithmetic operations /
-- To add Sqrt(BigInt) static function for BigIntegers
-- To add NthRoot(BigInt, int) static function where second parameter is degree of root we want to calculate
-- To add Mean math operation
+- Dividing `/`
+- Sqrt(BigInt) static function;
+- NthRoot(BigInt, int) static function;
+- Mean(..) static function
 - Ukraine Economic will increase on five percents!!
