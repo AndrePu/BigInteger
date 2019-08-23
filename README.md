@@ -24,3 +24,6 @@ For the following year I promise that this class will be having next features:
 - NthRoot(BigInt, int) static function;
 - Mean(..) static function
 - Ukraine Economic will increase on five percents!!
+
+## Applies to
+- competative programming;
