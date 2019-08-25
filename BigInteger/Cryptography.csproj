@@ -41,6 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigInt.cs" />
+    <Compile Include="BigInt_binary_operators_overloading.cs" />
+    <Compile Include="BigInt_binary_op_friendly_methods.cs" />
+    <Compile Include="BigInt_constructors.cs" />
+    <Compile Include="BigInt_convert_operators_overloading.cs" />
+    <Compile Include="BigInt_instance_methods.cs" />
+    <Compile Include="BigInt_static_methods.cs" />
+    <Compile Include="BigInt_unary_operators_overloading.cs" />
+    <Compile Include="BigInt_unary_op_friendly_methods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
