@@ -22,7 +22,7 @@ namespace Cryptography
 
             while (number != 0)
             {
-                Number.numericalRank.Add((byte)(number % 10));
+                Number.numericalRank.Add((sbyte)(number % 10));
 
                 number /= 10;
             }
@@ -43,7 +43,7 @@ namespace Cryptography
 
             while (number != 0)
             {
-                Number.numericalRank.Add((byte)(number % 10));
+                Number.numericalRank.Add((sbyte)(number % 10));
 
                 number /= 10;
             }
@@ -84,7 +84,7 @@ namespace Cryptography
             {
                 if (number[i] >= '0' && number[i] <= '9')
                 {
-                    Number.numericalRank.Insert(0, (byte)((byte)number[i] - 48));
+                    Number.numericalRank.Insert(0, (sbyte)((sbyte)number[i] - 48));
                 }
                 else
                     return null;

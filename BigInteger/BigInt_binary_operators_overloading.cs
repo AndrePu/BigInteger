@@ -191,9 +191,9 @@ namespace Cryptography
 
         #region Helping methods
 
-        private static List<byte> Add(List<byte> first, List<byte> second)
+        private static List<sbyte> Add(List<sbyte> first, List<sbyte> second)
         {
-            List<byte> result = new List<byte>();
+            List<sbyte> result = new List<sbyte>();
 
             if (first.Count < second.Count)
             {
@@ -206,8 +206,8 @@ namespace Cryptography
             // Adding common existing part
             for (int i = 0; i < second.Count; i++)
             {
-                byte unit_result = (byte)(first[i] + second[i]);
-                unit_result += (byte)((older_unit) ? 1 : 0);
+                sbyte unit_result = (sbyte)(first[i] + second[i]);
+                unit_result += (sbyte)((older_unit) ? 1 : 0);
 
                 older_unit = false;
 
@@ -223,8 +223,8 @@ namespace Cryptography
             // Adding left part from first number
             for (int i = second.Count; i != first.Count; i++)
             {
-                byte unit_result = first[i];
-                unit_result += (byte)((older_unit) ? 1 : 0);
+                sbyte unit_result = first[i];
+                unit_result += (sbyte)((older_unit) ? 1 : 0);
 
                 older_unit = false;
 
@@ -244,16 +244,16 @@ namespace Cryptography
             return result;
         }
 
-        private static List<byte> Multiply(List<byte> First_Init, List<byte> Second_Init)
+        private static List<sbyte> Multiply(List<sbyte> First_Init, List<sbyte> Second_Init)
         {
             /*Copying initial lists so they won't be changed*/
-            List<byte> First = new List<byte>();
+            List<sbyte> First = new List<sbyte>();
             First.AddRange(First_Init);
 
-            List<byte> Second = new List<byte>();
+            List<sbyte> Second = new List<sbyte>();
             Second.AddRange(Second_Init);
 
-            List<byte> Result = new List<byte>() { 0 };
+            List<sbyte> Result = new List<sbyte>() { 0 };
 
             if (First.Count < Second.Count)
                 Swap(ref First, ref Second);
@@ -261,8 +261,8 @@ namespace Cryptography
             for (int i = 0; i < Second.Count; i++)
             {
                 #region Unit multiplying
-                List<byte> cur_part = new List<byte>();
-                byte extra_units = 0;
+                List<sbyte> cur_part = new List<sbyte>();
+                sbyte extra_units = 0;
 
                 if (i > 0)              // increase number for multiplying on higher units
                 {
@@ -271,10 +271,10 @@ namespace Cryptography
 
                 for (int j = 0; j < First.Count; j++)
                 {
-                    byte unit_result = (byte)(First[j] * Second[i]);
+                    sbyte unit_result = (sbyte)(First[j] * Second[i]);
                     unit_result += extra_units;
 
-                    extra_units = (byte)(unit_result / 10);
+                    extra_units = (sbyte)(unit_result / 10);
 
                     unit_result %= 10;
 
@@ -304,19 +304,19 @@ namespace Cryptography
             return Result;
         }
 
-        private static List<byte> Minus(List<byte> First_Init, List<byte> Second_Init)
+        private static List<sbyte> Minus(List<sbyte> First_Init, List<sbyte> Second_Init)
         {
-            List<byte> First = new List<byte>();
+            List<sbyte> First = new List<sbyte>();
             First.AddRange(First_Init);
 
-            List<byte> Second = new List<byte>();
+            List<sbyte> Second = new List<sbyte>();
             Second.AddRange(Second_Init);
 
-            List<byte> Result = new List<byte>();
+            List<sbyte> Result = new List<sbyte>();
 
             for (int i = 0; i < Second.Count; i++)
             {
-                byte unit_result = (byte)(First[i] - Second[i]);
+                sbyte unit_result = (sbyte)(First[i] - Second[i]);
 
                 if (unit_result < 0)
                 {
