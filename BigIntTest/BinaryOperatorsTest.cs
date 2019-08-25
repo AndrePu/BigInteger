@@ -81,5 +81,20 @@ namespace Tests
             // Assert
             Assert.AreEqual(b3_2.ToString(), b3.ToString());
         }
+
+        [TestCase("1", "1", ExpectedResult = true)]
+        [TestCase("0", "0", ExpectedResult = true)]
+        [TestCase("1202", "1202", ExpectedResult = true)]
+        [TestCase("-10", "-10", ExpectedResult = true)]
+        [TestCase("-10", "10", ExpectedResult = false)]
+        [TestCase("10", "-10", ExpectedResult = false)]
+        [TestCase("10", "000010", ExpectedResult = true)]
+        public bool Equal_strings_operator(string num1, string num2)
+        {
+            var b1 = new BigInt(num1);
+            var b2 = new BigInt(num2);
+
+            return b1 == b2;
+        }
     }
 }
