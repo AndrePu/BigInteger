@@ -12,6 +12,11 @@ namespace Cryptography
 
         public BigInt(string number)
         {
+            if (number.Length != 1)
+            {
+                number = number.TrimStart('0');
+            }
+            
             if (number[0] == '-')
             {
                 negative = true;
