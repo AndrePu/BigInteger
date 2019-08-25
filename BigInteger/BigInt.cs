@@ -1,19 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Cryptography
 {
-    enum CompareBigInt
-    {
-        Less,
-        Equal,
-        Bigger
-    }
-
     public sealed class BigInt : IComparable<BigInt>
     {
         private bool negative = false;
@@ -75,6 +65,7 @@ namespace Cryptography
         #endregion
 
         #region Instance methods
+        
         public bool IsNegative()
         {
             return negative;
@@ -369,9 +360,9 @@ namespace Cryptography
         
         public static bool operator <(BigInt First, BigInt Second)
         {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+            int compare_result = CompareBigIntegers(First, Second);
 
-            if (compare_result == CompareBigInt.Less)
+            if (compare_result == -1)
             {
                 return true;
             }
@@ -381,9 +372,9 @@ namespace Cryptography
 
         public static bool operator >(BigInt First, BigInt Second)
         {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+            int compare_result = CompareBigIntegers(First, Second);
 
-            if (compare_result == CompareBigInt.Bigger)
+            if (compare_result == 1)
             {
                 return true;
             }
@@ -393,9 +384,9 @@ namespace Cryptography
 
         public static bool operator <=(BigInt First, BigInt Second)
         {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+            int compare_result = CompareBigIntegers(First, Second);
 
-            if (compare_result == CompareBigInt.Less || compare_result == CompareBigInt.Equal)
+            if (compare_result == -1 || compare_result == 0)
             {
                 return true;
             }
@@ -405,9 +396,9 @@ namespace Cryptography
 
         public static bool operator >=(BigInt First, BigInt Second)
         {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+            int compare_result = CompareBigIntegers(First, Second);
 
-            if (compare_result == CompareBigInt.Bigger || compare_result == CompareBigInt.Equal)
+            if (compare_result == 1 || compare_result == 0)
             {
                 return true;
             }
@@ -417,9 +408,9 @@ namespace Cryptography
 
         public static bool operator ==(BigInt First, BigInt Second)
         {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+            int compare_result = CompareBigIntegers(First, Second);
 
-            if (compare_result == CompareBigInt.Equal)
+            if (compare_result == 0)
             {
                 return true;
             }
@@ -429,9 +420,9 @@ namespace Cryptography
 
         public static bool operator !=(BigInt First, BigInt Second)
         {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+            int compare_result = CompareBigIntegers(First, Second);
 
-            if (compare_result == CompareBigInt.Equal)
+            if (compare_result == 0)
             {
                 return false;
             }
@@ -595,21 +586,17 @@ namespace Cryptography
             return Result;
         }
 
-        private static CompareBigInt CompareBigIntegers(BigInt First, BigInt Second)
+        private static int CompareBigIntegers(BigInt First, BigInt Second)
         {
-            CompareBigInt compare_result;
+            int compare_result;
 
             if (First.IsNegative() && !Second.IsNegative())
             {
-                compare_result = CompareBigInt.Less;
-
-                return compare_result;
+                compare_result = -1;
             }
             else if (!First.IsNegative() && Second.IsNegative())
             {
-                compare_result = CompareBigInt.Bigger;
-
-                return compare_result;
+                compare_result = 1;
             }
             else if (First.IsNegative() && Second.IsNegative())
             {
@@ -617,21 +604,24 @@ namespace Cryptography
             }
             else
                 return CompareBigIntegersPos(First, Second);
+
+
+            return compare_result;
         }
         
-        private static CompareBigInt CompareBigIntegersNeg(BigInt First, BigInt Second)
+        private static int CompareBigIntegersNeg(BigInt First, BigInt Second)
         {
-            CompareBigInt compare_result;
+            int compare_result;
 
             if (First.numericalRank.Count < Second.numericalRank.Count)
             {
-                compare_result = CompareBigInt.Bigger;
+                compare_result = 1;
 
                 return compare_result;
             }
             else if (First.numericalRank.Count > Second.numericalRank.Count)
             {
-                compare_result = CompareBigInt.Less;
+                compare_result = -1;
 
                 return compare_result;
             }
@@ -641,37 +631,37 @@ namespace Cryptography
                 {
                     if (First.numericalRank[i] < Second.numericalRank[i])
                     {
-                        compare_result = CompareBigInt.Bigger;
+                        compare_result = 1;
 
                         return compare_result;
                     }
                     else if (First.numericalRank[i] > Second.numericalRank[i])
                     {
-                        compare_result = CompareBigInt.Less;
+                        compare_result = -1;
 
                         return compare_result;
                     }
                 }
             }
 
-            compare_result = CompareBigInt.Equal;
+            compare_result = 0;
 
             return compare_result;
         }
         
-        private static CompareBigInt CompareBigIntegersPos(BigInt First, BigInt Second)
+        private static int CompareBigIntegersPos(BigInt First, BigInt Second)
         {
-            CompareBigInt compare_result;
+            int compare_result;
 
             if (First.numericalRank.Count < Second.numericalRank.Count)
             {
-                compare_result = CompareBigInt.Less;
+                compare_result = -1;
 
                 return compare_result;
             }
             else if (First.numericalRank.Count > Second.numericalRank.Count)
             {
-                compare_result = CompareBigInt.Bigger;
+                compare_result = 1;
 
                 return compare_result;
             }
@@ -681,20 +671,20 @@ namespace Cryptography
                 {
                     if (First.numericalRank[i] > Second.numericalRank[i])
                     {
-                        compare_result = CompareBigInt.Bigger;
+                        compare_result = 1;
 
                         return compare_result;
                     }
                     else if (First.numericalRank[i] < Second.numericalRank[i])
                     {
-                        compare_result = CompareBigInt.Less;
+                        compare_result = -1;
 
                         return compare_result;
                     }
                 }
             }
 
-            compare_result = CompareBigInt.Equal;
+            compare_result = 0;
 
             return compare_result;
         }
@@ -849,5 +839,3 @@ namespace Cryptography
 
 
 }
-
-
