@@ -8,9 +8,9 @@ namespace Cryptography
 {
     partial class BigInt
     {
-        static void Swap(ref List<int> first, ref List<int> second)
+        static void Swap(ref List<byte> first, ref List<byte> second)
         {
-            List<int> temp = first;
+            List<byte> temp = first;
             first = second;
             second = temp;
         }
@@ -39,7 +39,7 @@ namespace Cryptography
             for (; i < line.Length; i++)
             {
                 if (line[i] >= '0' && line[i] <= '9')
-                    number.numericalRank.Insert(0, (int)line[i] - 48);
+                    number.numericalRank.Insert(0, (byte)((byte)line[i] - 48));
                 else
                     return null; // THROW EXCEPTION HERE!!!!!!!!!!!!!!!!!!!!!1
             }

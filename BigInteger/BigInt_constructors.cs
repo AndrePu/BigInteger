@@ -19,14 +19,14 @@ namespace Cryptography
 
             for (int i = number.Length - 1; i != -1 + ((negative) ? 1 : 0); i--)
             {
-                this.numericalRank.Add(int.Parse(number[i].ToString()));
+                this.numericalRank.Add(byte.Parse(number[i].ToString()));
             }
         }
 
         public BigInt(int number)
         {
             if (number == 0)
-                this.numericalRank.Add(number);
+                this.numericalRank.Add((byte)number);
 
 
             if (number < 0)
@@ -37,7 +37,7 @@ namespace Cryptography
 
             while (number != 0)
             {
-                this.numericalRank.Add(number % 10);
+                this.numericalRank.Add((byte)(number % 10));
                 number /= 10;
             }
         }
@@ -45,7 +45,7 @@ namespace Cryptography
         public BigInt(long number)
         {
             if (number == 0)
-                this.numericalRank.Add((int)number);
+                this.numericalRank.Add((byte)number);
 
             if (number < 0)
             {
@@ -55,7 +55,7 @@ namespace Cryptography
 
             while (number != 0)
             {
-                this.numericalRank.Add((int)(number % 10));
+                this.numericalRank.Add((byte)(number % 10));
                 number /= 10;
             }
         }
