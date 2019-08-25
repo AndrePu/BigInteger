@@ -14,7 +14,7 @@ namespace Cryptography
         Bigger
     }
 
-    public sealed class BigInt
+    public sealed class BigInt : IComparable<BigInt>
     {
         private bool negative = false;
         private List<int> numericalRank = new List<int>();                 // big number will be presented as list of integers presenting one digit of number (старшие разряды числа будут дальше идти по списку)
@@ -79,17 +79,21 @@ namespace Cryptography
         {
             return negative;
         }
-        
-        public void ConsolePrint()
-        {
-            if (negative)
-                Console.Write('-');
-            for (int i = numericalRank.Count - 1; i != -1; i--)
-            {
-                Console.Write(numericalRank[i]);
-            }
 
-            Console.WriteLine();
+        public int CompareTo(BigInt other)
+        {
+            if (this == other)
+            {
+                return 0;
+            }
+            else if (this > other)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
         }
         
         public override string ToString()
@@ -198,14 +202,245 @@ namespace Cryptography
 
             Swap(ref numbers[right], ref numbers[++ind1]);
             return ind1;
-        }
+        }        
 
         /// <summary>
-        /// Adds two lists that present two BigIntegers
+        /// Calculates factorial of given number. 
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <returns></returns>
+        /// <param name="number"></param>
+        /// <returns>If number less than one functions returns 1.</returns>
+        public static BigInt Factorial(int number)
+        {
+            BigInt result = new BigInt(1);          // the result of factorialization will be located in BigInt type object
+
+            for (int i = 2; i <= number; i++)
+            {
+                result *= i;
+            }
+
+            return result;
+        }
+
+        public static BigInt Abs(BigInt number)
+        {
+            BigInt abs_number = new BigInt();
+            abs_number.numericalRank.AddRange(number.numericalRank);
+            return abs_number;
+        }
+        
+        public static BigInt Pow(BigInt Number, int power)
+        {
+            BigInt Result = new BigInt(1);
+            for (int i = 0; i < power; i++)
+            {
+                Result *= Number;
+            }
+
+            return Result;
+        }
+
+        public static BigInt Sqrt(BigInt Number) // ДОПИСАТЬ ЗДЕСЬ. НО СНАЧАЛА СДЕЛАТЬ ОПЕРАЦИЮ ДЕЛЕНИЯ ДЛЯ ЧИСЕЛ
+        {
+            throw new NotImplementedException();
+        }
+
+        
+
+        #endregion
+        
+        #region Unary operators overloading
+        public static bool operator true(BigInt number)
+        {
+            return number.numericalRank.Count != 1 || number.numericalRank[0] != 0;
+        }
+
+        public static bool operator false(BigInt number)
+        {
+            return number.numericalRank.Count == 1 && number.numericalRank[0] == 0;
+        }
+
+        #endregion
+
+        #region Binary operators overloading
+        public static BigInt operator +(BigInt First, BigInt Second)
+        {
+            BigInt Result = new BigInt(0);
+
+            if (First.IsNegative() && !Second.IsNegative())
+            {
+                if ((Abs(First)) > (Abs(Second)))
+                {
+                    Result.numericalRank = Minus(First.numericalRank,Second.numericalRank);
+                    Result.negative = true;
+                }
+                else if (Abs(First) < Abs(Second))
+                {
+                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
+                }
+            }
+            else if (!First.IsNegative() && Second.IsNegative())
+            {
+                if (Abs(First) > Abs(Second))
+                {
+                    Result.numericalRank = Minus(First.numericalRank, Second.numericalRank);
+
+                }
+                else if (Abs(First) < Abs(Second))
+                {
+                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
+                    Result.negative = true;
+                }
+            }
+            else if (First.IsNegative() && Second.IsNegative())
+            {
+                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
+                Result.negative = true;
+            }
+            else
+            {
+                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
+            }
+
+            return Result;
+        }
+        
+        public static BigInt operator -(BigInt First, BigInt Second)
+        {
+            BigInt Result = new BigInt(0);
+
+            /*Minus logic here*/
+            if (First.IsNegative() && !Second.IsNegative())
+            {
+                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
+                Result.negative = true;
+            }
+            else if (!First.IsNegative() && Second.IsNegative())
+            {
+                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
+            }
+            else if (First.IsNegative() && Second.IsNegative())
+            {
+                if (Abs(First) > Abs(Second))
+                {
+                    Result.numericalRank = Minus(First.numericalRank, Second.numericalRank);
+                    Result.negative = true;
+                }
+                else if (Abs(First) < Abs(Second))
+                {
+                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
+                }
+            }
+            else
+            {
+                if (First > Second)
+                {
+                    Result.numericalRank = Minus(First.numericalRank, Second.numericalRank);
+                }
+                else if (First < Second)
+                {
+                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
+
+                    Result.negative = true;
+                }
+            }
+
+            return Result;
+        }
+
+        public static BigInt operator *(BigInt First, BigInt Second)
+        {
+            BigInt Result = new BigInt(0);
+
+            Result.numericalRank = Multiply(First.numericalRank, Second.numericalRank);
+
+            if (First.IsNegative() && Second.IsNegative())
+            {
+                Result.negative = false;
+            }
+            else if (First.IsNegative() || Second.IsNegative())
+            {
+                Result.negative = true;
+            }
+            else
+                Result.negative = false;
+                
+            return Result;
+        }        
+        
+        public static bool operator <(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Less)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator >(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Bigger)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator <=(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Less || compare_result == CompareBigInt.Equal)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator >=(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Bigger || compare_result == CompareBigInt.Equal)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator ==(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Equal)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool operator !=(BigInt First, BigInt Second)
+        {
+            CompareBigInt compare_result = CompareBigIntegers(First, Second);
+
+            if (compare_result == CompareBigInt.Equal)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        #region Helping methods
+
         private static List<int> Add(List<int> first, List<int> second)
         {
             List<int> result = new List<int>();
@@ -383,11 +618,7 @@ namespace Cryptography
             else
                 return CompareBigIntegersPos(First, Second);
         }
-
-        /// <summary>
-        /// Compares negative BigIntegers.
-        /// </summary>
-        /// <returns></returns>
+        
         private static CompareBigInt CompareBigIntegersNeg(BigInt First, BigInt Second)
         {
             CompareBigInt compare_result;
@@ -427,13 +658,7 @@ namespace Cryptography
 
             return compare_result;
         }
-
-        /// <summary>
-        /// Compares positive BigIntegers
-        /// </summary>
-        /// <param name="First"></param>
-        /// <param name="Second"></param>
-        /// <returns></returns>
+        
         private static CompareBigInt CompareBigIntegersPos(BigInt First, BigInt Second)
         {
             CompareBigInt compare_result;
@@ -473,50 +698,41 @@ namespace Cryptography
 
             return compare_result;
         }
-        
 
-        /// <summary>
-        /// Calculates factorial of given number. 
-        /// </summary>
-        /// <param name="number"></param>
-        /// <returns>If number less than one functions returns 1.</returns>
-        public static BigInt Factorial(int number)
+
+        #endregion
+
+        #endregion
+
+        #region Friendly to overloaded binary operators methods
+
+        public static BigInt Add(BigInt b1, BigInt b2)
         {
-            BigInt result = new BigInt(1);          // the result of factorialization will be located in BigInt type object
+            return (b1 + b2);
+        }
+               
+        public static BigInt Minus(BigInt b1, BigInt b2)
+        {
+            return (b1 - b2);
+        }
 
-            for (int i = 2; i <= number; i++)
+        public static BigInt Multiply(BigInt b1, BigInt b2)
+        {
+            return (b1 * b2);
+        }
+
+        public static int Compare(BigInt b1, BigInt b2)
+        {
+            if (b1 > b2)
             {
-                result *= i;
+                return 1;
             }
-
-            return result;
-        }
-
-        public static BigInt Abs(BigInt number)
-        {
-            BigInt abs_number = new BigInt();
-            abs_number.numericalRank.AddRange(number.numericalRank);
-            return abs_number;
-        }
-        
-        public static BigInt Pow(BigInt Number, int power)
-        {
-            BigInt Result = new BigInt(1);
-            for (int i = 0; i < power; i++)
+            else if (b1 < b2)
             {
-                Result *= Number;
+                return -1;
             }
-
-            return Result;
-        }
-
-        public static BigInt Sqrt(BigInt Number) // ДОПИСАТЬ ЗДЕСЬ. НО СНАЧАЛА СДЕЛАТЬ ОПЕРАЦИЮ ДЕЛЕНИЯ ДЛЯ ЧИСЕЛ
-        {
-            BigInt Result = new BigInt();
-
-            int x0 = 100; // default X, that shows amount of iterations needed to do a sqrt
-
-            return Result;
+            else
+                return 0;
         }
 
         public static BigInt Sum(params BigInt[] bigInt_arr)
@@ -540,201 +756,8 @@ namespace Cryptography
 
             return result;
         }
-        #endregion
-
-        #region Unary operators overloading
-        public static bool operator true(BigInt number)
-        {
-            return number.numericalRank.Count != 1 || number.numericalRank[0] != 0;
-        }
-
-        public static bool operator false(BigInt number)
-        {
-            return number.numericalRank.Count == 1 && number.numericalRank[0] == 0;
-        }
 
         #endregion
-
-        #region Binary operators overloading
-        public static BigInt operator +(BigInt First, BigInt Second)
-        {
-            BigInt Result = new BigInt(0);
-
-            if (First.IsNegative() && !Second.IsNegative())
-            {
-                if ((Abs(First)) > (Abs(Second)))
-                {
-                    Result.numericalRank = Minus(First.numericalRank,Second.numericalRank);
-                    Result.negative = true;
-                }
-                else if (Abs(First) < Abs(Second))
-                {
-                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
-                }
-            }
-            else if (!First.IsNegative() && Second.IsNegative())
-            {
-                if (Abs(First) > Abs(Second))
-                {
-                    Result.numericalRank = Minus(First.numericalRank, Second.numericalRank);
-
-                }
-                else if (Abs(First) < Abs(Second))
-                {
-                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
-                    Result.negative = true;
-                }
-            }
-            else if (First.IsNegative() && Second.IsNegative())
-            {
-                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
-                Result.negative = true;
-            }
-            else
-            {
-                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
-            }
-
-            return Result;
-        }
-
-        public static BigInt operator *(BigInt First, BigInt Second)
-        {
-            BigInt Result = new BigInt(0);
-
-            Result.numericalRank = Multiply(First.numericalRank, Second.numericalRank);
-
-            if (First.IsNegative() && Second.IsNegative())
-            {
-                Result.negative = false;
-            }
-            else if (First.IsNegative() || Second.IsNegative())
-            {
-                Result.negative = true;
-            }
-            else
-                Result.negative = false;
-                
-            return Result;
-        }
-
-        public static BigInt operator -(BigInt First, BigInt Second)
-        {
-            BigInt Result = new BigInt(0);
-
-            /*Minus logic here*/
-            if (First.IsNegative() && !Second.IsNegative())
-            {
-                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
-                Result.negative = true;
-            }
-            else if (!First.IsNegative() && Second.IsNegative())
-            {
-                Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
-            }
-            else if (First.IsNegative() && Second.IsNegative())
-            {
-                if (Abs(First) > Abs(Second))
-                {
-                    Result.numericalRank = Minus(First.numericalRank, Second.numericalRank);
-                    Result.negative = true;
-                }
-                else if (Abs(First) < Abs(Second))
-                {
-                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
-                }
-            }
-            else
-            {
-                if (First > Second)
-                {
-                    Result.numericalRank = Minus(First.numericalRank, Second.numericalRank);
-                }
-                else if (First < Second)
-                {
-                    Result.numericalRank = Minus(Second.numericalRank, First.numericalRank);
-
-                    Result.negative = true;
-                }
-            }
-
-            return Result;
-        }
-        
-        
-        public static bool operator <(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Less)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator >(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Bigger)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator <=(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Less || compare_result == CompareBigInt.Equal)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator >=(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Bigger || compare_result == CompareBigInt.Equal)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator ==(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Equal)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator !=(BigInt First, BigInt Second)
-        {
-            CompareBigInt compare_result = CompareBigIntegers(First, Second);
-
-            if (compare_result == CompareBigInt.Equal)
-            {
-                return false;
-            }
-
-            return true;
-        }
-        #endregion
-
 
         #region Convertation operators overloading
         public static implicit operator BigInt(int number)
