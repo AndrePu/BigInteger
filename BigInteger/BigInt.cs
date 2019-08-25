@@ -263,13 +263,29 @@ namespace Cryptography
         #region Unary operators overloading
         public static bool operator true(BigInt number)
         {
-            return number.numericalRank.Count != 1 || number.numericalRank[0] != 0;
+            return IsTrue(number);
         }
 
         public static bool operator false(BigInt number)
         {
-            return number.numericalRank.Count == 1 && number.numericalRank[0] == 0;
+            return IsFalse(number);
         }
+
+        #endregion
+
+        #region Friendly to overloaded unary operators methods
+
+        public static bool IsTrue(BigInt number)
+        {
+            return number.numericalRank.Count > 1 || number.numericalRank.Count == 1 && number.numericalRank[0] != 0;
+        }
+
+        public static bool IsFalse(BigInt number)
+        {
+            return !IsTrue(number);
+        }
+
+
 
         #endregion
 
@@ -833,7 +849,4 @@ namespace Cryptography
         }
         #endregion
     }
-
-
-
 }
