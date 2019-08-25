@@ -16,7 +16,7 @@ namespace Tests
         [TestCase("-438934", "89342432")]
         [TestCase("-438934", "-89342432")]
         [TestCase("438934", "-89342432")]
-        public void Adding_strings_method(string num1, string num2)
+        public void Adding_strings_operator(string num1, string num2)
         {
             // Arrange
             BigInt b1 = new BigInt(num1);
@@ -40,7 +40,7 @@ namespace Tests
         [TestCase("-438934", "89342432")]
         [TestCase("-438934", "-89342432")]
         [TestCase("438934", "-89342432")]
-        public void Minus_strings_method(string num1, string num2)
+        public void Minus_strings_operator(string num1, string num2)
         {
             // Arrange
             BigInt b1 = new BigInt(num1);
@@ -65,7 +65,7 @@ namespace Tests
         [TestCase("-1289832894318943289032489", "9240384329034318943289032489")]
         [TestCase("-1289832894318943289032489", "-9240384329034318943289032489")]
         [TestCase("1289832894318943289032489", "-9240384329034318943289032489")]
-        public void Multiply_strings_method(string num1, string num2)
+        public void Multiply_strings_operator(string num1, string num2)
         {
             // Arrange
             BigInt b1 = new BigInt(num1);
