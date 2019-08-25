@@ -12,17 +12,24 @@ namespace Cryptography
 
         public BigInt(string number)
         {
-            if (number.Length != 1)
-            {
-                number = number.TrimStart('0');
-            }
-            
             if (number[0] == '-')
             {
                 negative = true;
+                number = number.Remove(0, 1);
             }
 
-            for (int i = number.Length - 1; i != -1 + ((negative) ? 1 : 0); i--)
+            if (number.Length != 1)
+            {
+                number = number.TrimStart('0');
+
+                if (number == "")
+                {
+                    number = "0";
+                }
+            }            
+            
+
+            for (int i = number.Length - 1; i != -1; i--)
             {
                 this.numericalRank.Add(sbyte.Parse(number[i].ToString()));
             }
