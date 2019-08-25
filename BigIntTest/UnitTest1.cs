@@ -5,7 +5,7 @@ using System;
 
 namespace Tests
 {
-    public class Tests
+    public partial class Tests
     {
         [SetUp]
         public void Setup()
@@ -28,24 +28,6 @@ namespace Tests
 
             // Assert
             Assert.IsTrue(equal);
-        }
-        
-        [TestCase("1289832894318943289032489", "9240384329034318943289032489")]
-        public void Test2(string num1, string num2)
-        {
-            // Arrange
-            BigInt b1 = new BigInt(num1);
-            BigInt b2 = new BigInt(num2);
-
-            BigInteger b1_2 = new BigInteger(Convert.ToDecimal(num1));
-            BigInteger b2_2 = new BigInteger(Convert.ToDecimal(num2));
-            
-            // Act
-            BigInt b3 = b1 + b2;            
-            BigInteger b3_2 = b1_2 + b2_2;
-            
-            // Assert
-            Assert.AreEqual(b3_2.ToString(), b3.ToString());
         }
     }
 }
