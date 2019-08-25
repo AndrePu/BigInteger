@@ -112,12 +112,19 @@ namespace Cryptography
             first = second;
             second = temp;
         }
-
+        
+        public static void Swap(ref BigInt First, ref BigInt Second)
+        {
+            BigInt temp = First;
+            First = Second;
+            Second = temp;
+        }
+        
         public static BigInt Parse(string line)
         {
             if (line == String.Empty)
                 return null;
-            
+
             BigInt number = new BigInt();
 
             int i = 0;
@@ -156,26 +163,17 @@ namespace Cryptography
 
             return copied_number;
         }
-
-        public static void Swap(ref BigInt First, ref BigInt Second)
-        {
-            BigInt temp = First;
-            First = Second;
-            Second = temp;
-        }
-
-        
         public static void QuickSort(ref BigInt[] numbers, int left, int right)
         {
             if (left < right)
             {
                 int piv = Partition(ref numbers, left, right);
 
-                QuickSort(ref numbers, left, piv-1);
+                QuickSort(ref numbers, left, piv - 1);
                 QuickSort(ref numbers, piv + 1, right);
             }
         }
-        
+
         private static int Partition(ref BigInt[] numbers, int left, int right)
         {
             BigInt pivot = numbers[right];
@@ -193,7 +191,30 @@ namespace Cryptography
 
             Swap(ref numbers[right], ref numbers[++ind1]);
             return ind1;
-        }        
+        }
+
+
+        public static BigInt Sum(params BigInt[] bigInt_arr)
+        {
+            BigInt result = new BigInt(0);
+            for (int i = 0; i < bigInt_arr.Length; i++)
+            {
+                result += bigInt_arr[i];
+            }
+
+            return result;
+        }
+
+        public static BigInt Multiply(params BigInt[] bigInt_arr)
+        {
+            BigInt result = new BigInt(1);
+            for (int i = 0; i < bigInt_arr.Length; i++)
+            {
+                result *= bigInt_arr[i];
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Calculates factorial of given number. 
@@ -298,8 +319,7 @@ namespace Cryptography
         public static BigInt operator -(BigInt First, BigInt Second)
         {
             BigInt Result = new BigInt(0);
-
-            /*Minus logic here*/
+            
             if (First.IsNegative() && !Second.IsNegative())
             {
                 Result.numericalRank = Add(First.numericalRank, Second.numericalRank);
@@ -386,7 +406,7 @@ namespace Cryptography
         {
             int compare_result = CompareBigIntegers(First, Second);
 
-            if (compare_result == -1 || compare_result == 0)
+            if (compare_result != 1)
             {
                 return true;
             }
@@ -398,7 +418,7 @@ namespace Cryptography
         {
             int compare_result = CompareBigIntegers(First, Second);
 
-            if (compare_result == 1 || compare_result == 0)
+            if (compare_result != -1)
             {
                 return true;
             }
@@ -723,28 +743,6 @@ namespace Cryptography
             }
             else
                 return 0;
-        }
-
-        public static BigInt Sum(params BigInt[] bigInt_arr)
-        {
-            BigInt result = new BigInt(0);
-            for (int i = 0; i < bigInt_arr.Length; i++)
-            {
-                result += bigInt_arr[i];
-            }
-
-            return result;
-        }
-
-        public static BigInt Multiply(params BigInt[] bigInt_arr)
-        {
-            BigInt result = new BigInt(1);
-            for (int i = 0; i < bigInt_arr.Length; i++)
-            {
-                result *= bigInt_arr[i];
-            }
-
-            return result;
         }
 
         #endregion
